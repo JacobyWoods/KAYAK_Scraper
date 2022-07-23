@@ -14,12 +14,11 @@ def scrape(name):
         time.sleep(15)
         table_data = []
 
-        #view_more_elements = WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located(
-        #    (By.CLASS_NAME, "resultInner")))
-        '''for more_element in view_more_elements:
+        '''view_more_elements = WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located(
+            (By.CLASS_NAME, "resultInner")))
+        for more_element in view_more_elements:
             more_element.click()'''
         driver.implicitly_wait(10)
-        #time.sleep(5)
 
         flights = driver.find_elements(By.CLASS_NAME, 'multibook-dropdown')
         flights_price = driver.find_elements(By.CLASS_NAME, 'multibook-dropdown')
@@ -52,10 +51,10 @@ def scrape(name):
             row_data.append(flights_times[i].text.partition('\n')[0])
             row_data.append(flights_airports[i].text.partition('\n')[0])
             row_data.append(flights_airports[i].text.partition('\n')[2].replace('\n', ''))
-            try:
-                row_data.append(flights_class[1+i*2].text)
-            except:
-                row_data.append('XXXX')
+            #try:
+            row_data.append(flights_class[1+i*2].text)
+            #except:
+            #    row_data.append('XXXX')
 
             table_data.append(row_data)
 
@@ -63,22 +62,27 @@ def scrape(name):
 
         df = pd.DataFrame(table_data, columns=table_headers)
         print(df.to_string())
-        df.to_csv('SLC-NYC_KAYAK.csv', mode='a')
+        df.to_csv(f'{origin_airport}-{destination_airport}_KAYAK_' + str(datetime.date.today()) + '.csv', mode='a')
 
 
 if __name__ == '__main__':
-
     url_list = []
-    #date = datetime.date.today()           #choose today or specific start date
-    date = datetime.date(2022, 8, 16)
 
-    for i in range(120):
+    # choose today or specific start date
+    date = datetime.date.today()
+        #date = datetime.date(2022, 11, 5)
+
+    '''Airports: SLC | Salt Lake, NYC | New York City'''
+    origin_airport = 'NYC'
+    destination_airport = 'SLC'
+
+
+
+    for i in range(140):
         date += datetime.timedelta(days=1)
-        url_list.append(f'https://www.kayak.com/flights/SLC-NYC/{date}?sort=bestflight_a&fs=stops=-2')
+        url_list.append(f'https://www.kayak.com/flights/{origin_airport}-{destination_airport}/{date}?sort=bestflight_a&fs=stops=-2')
     print(url_list)
 
     for each in url_list:
         scrape(each)
-
-    #scrape('https://www.kayak.com/flights/SLC-NYC/2022-08-31?sort=bestflight_a&fs=stops=-2')
 
