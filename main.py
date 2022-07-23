@@ -69,8 +69,8 @@ if __name__ == '__main__':
     url_list = []
 
     # choose today or specific start date
-    date = datetime.date.today()
-        #date = datetime.date(2022, 11, 5)
+    #date = datetime.date.today()
+    date = datetime.date(2022, 9, 1)
 
     '''Airports: SLC | Salt Lake, NYC | New York City'''
     origin_airport = 'NYC'
