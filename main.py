@@ -71,11 +71,11 @@ if __name__ == '__main__':
 
     # choose today or specific start date
     date = datetime.date.today()
-    date = datetime.date(2022, 12, 7)
+    date = datetime.date(2023, 1, 13)
 
     '''Airports: SLC | Salt Lake, NYC | New York City'''
-    origin_airport = 'SLC'
-    destination_airport = 'NYC'
+    origin_airport = 'NYC'
+    destination_airport = 'SLC'
 
     for i in range(140):
         date += datetime.timedelta(days=1)
