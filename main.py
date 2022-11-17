@@ -8,6 +8,7 @@ import time
 import datetime
 import random
 
+
 def scrape(name):
 
     with webdriver.Firefox(executable_path='/usr/local/bin/geckodriver') as driver:
@@ -15,10 +16,6 @@ def scrape(name):
         time.sleep(random.randrange(15, 29, 1))
         table_data = []
 
-        '''view_more_elements = WebDriverWait(driver, 20).until(EC.visibility_of_all_elements_located(
-            (By.CLASS_NAME, "resultInner")))
-        for more_element in view_more_elements:
-            more_element.click()'''
         driver.implicitly_wait(10)
 
         flights = driver.find_elements(By.CLASS_NAME, 'multibook-dropdown')
@@ -71,11 +68,11 @@ if __name__ == '__main__':
 
     # choose today or specific start date
     date = datetime.date.today()
-    date = datetime.date(2023, 1, 13)
+    #date = datetime.date(2022, 12, 22)
 
     '''Airports: SLC | Salt Lake, NYC | New York City'''
-    origin_airport = 'NYC'
-    destination_airport = 'SLC'
+    origin_airport = 'SLC'
+    destination_airport = 'NYC'
 
     for i in range(140):
         date += datetime.timedelta(days=1)

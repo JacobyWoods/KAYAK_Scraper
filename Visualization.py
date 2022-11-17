@@ -6,7 +6,7 @@ import datetime as dt
 
 
 def price_by_date_plot(df):
-    # this is a bar chart for price by date.
+    # this is a scatter plot for price by date.
     df_price_by_date = df[(df['Days_Out'] > 21)]
     df_price_by_date = df_price_by_date.groupby(['Flight_Date', 'Departing_Airport'], as_index=False).mean()
     fig, ax = plt.subplots(figsize=(15, 8))
@@ -24,8 +24,24 @@ def price_by_date_plot(df):
     ax.legend(labels=['ALL', 'SLC'])
 
     plt.show()
-    print(df_price_by_date.head())
-    #fig = sns.barplot(data=df_price_by_date, x='Flight_Date', y='Price')
+
+
+def price_by_date_bar(df):
+    # this is a bar chart for price by date.
+    df_price_by_date = df[(df['Days_Out'] > 21)]
+    df_price_by_date = df_price_by_date.groupby(['Flight_Date'], as_index=False).mean()
+    fig, ax = plt.subplots(figsize=(15, 8))
+
+    x_dates = df_price_by_date.Flight_Date.sort_values().dt.strftime('%b %d, %y').unique()
+
+    fig = sns.barplot(data=df_price_by_date, x='Flight_Date', y='Price')
+    ax.set_xticklabels(labels=x_dates, rotation=90, ha='right')
+
+    for index, label in enumerate(ax.xaxis.get_ticklabels()):
+        if index % 7 != 0:
+            label.set_visible(False)
+
+    plt.show()
 
 
 def price_by_days_out(df):
@@ -35,7 +51,7 @@ def price_by_days_out(df):
     df_days_out_average = df_days_out_average.groupby(['Days_Out'], as_index=False).mean()
 
     fig, ax = plt.subplots(figsize=(15, 8))
-    fig = sns.stripplot(data=df_days_out_average, x='Days_Out', y='Price', s=3)
+    fig = sns.stripplot(data=df_days_out_average, x='Days_Out', y='Price', s=5)
 
     plt.xticks(range(0, 250, 25))
     plt.show()
@@ -75,7 +91,9 @@ if __name__ == '__main__':
     df = pd.read_csv('/Users/jacobywoods/Desktop/Repositories/KAYAK_Scraper/df_mod_TEST.csv',
                      parse_dates=['Flight_Date', 'Date_Entered'], dtype=dtypes)
 
-    price_by_date_plot(df)
+    price_by_date_bar(df)
+    #purchase_weekday(df)
+    #price_by_days_out(df)
 
 
 
