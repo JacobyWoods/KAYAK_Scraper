@@ -1,6 +1,8 @@
 import pandas as pd
 import sqlite3
 import re
+import glob
+import shutil
 
 
 def transform_flight_data():
@@ -10,7 +12,7 @@ def transform_flight_data():
     df = pd.read_sql_query('SELECT * FROM "flights"', con)
 
     # Remove non-data rows/columns
-    df = df[df['Date_Entered'] != 'Date Entered']
+    df = df[(df['Date_Entered'] != 'Date Entered') & (df['Date_Entered'] != 'Date_Entered')]
     df = df.drop('entry', axis=1)
 
     df['Date_Entered'] = pd.to_datetime(df['Date_Entered'])
@@ -50,5 +52,25 @@ def transform_flight_data():
     df.to_csv(f'df_mod_TEST.csv')
 
 
+def csv_to_sqlite3():
+    # Load all the csv into the sqlite3 database and move them to different directory.
+
+    kayak_scraper_db_con = sqlite3.connect('KAYAK_Scraper.db')
+
+    new_data_path = 'Data_New/*.csv'
+    consumed_data_path = 'Data_Loaded/'
+    headers_new = {'Date Entered': 'Date_Entered', 'Flight Date': 'Flight_Date'}
+
+    for filename in glob.glob(new_data_path):
+        # Read the csv file and add it to sqlite database
+        df_from_csv_file = pd.read_csv(filename, index_col=0)
+        df_from_csv_file.rename(columns=headers_new, inplace=True)
+        df_from_csv_file.to_sql('flights', kayak_scraper_db_con, if_exists='append', index=False)
+
+        # Move the csv file from new data to consumed data.
+        shutil.move(filename, consumed_data_path)
+
+
 if __name__ == '__main__':
-    transform_flight_data()
+
+    csv_to_sqlite3()
