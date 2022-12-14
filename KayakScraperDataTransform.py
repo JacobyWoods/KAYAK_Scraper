@@ -55,10 +55,13 @@ def transform_flight_data():
 def csv_to_sqlite3():
     # Load all the csv into the sqlite3 database and move them to different directory.
 
-    kayak_scraper_db_con = sqlite3.connect('KAYAK_Scraper.db')
+    repository_directory_path = '/Users/jacobywoods/Desktop/Repositories/KAYAK_Scraper/'
+    kayak_scraper_db_path = f'{repository_directory_path}/kayak_scraper.db'
 
-    new_data_path = 'Data_New/*.csv'
-    consumed_data_path = 'Data_Loaded/'
+    kayak_scraper_db_con = sqlite3.connect(kayak_scraper_db_path)
+
+    new_data_path = f'{repository_directory_path}Data_New/*.csv'
+    consumed_data_path = f'{repository_directory_path}Data_Loaded/'
     headers_new = {'Date Entered': 'Date_Entered', 'Flight Date': 'Flight_Date'}
 
     for filename in glob.glob(new_data_path):

@@ -22,7 +22,7 @@ def scrape(origin_airport, destination_airport, start_date=datetime.date.today()
     for page in url_list:
         with webdriver.Firefox(executable_path='/usr/local/bin/geckodriver') as driver:
             driver.get(page)
-            time.sleep(random.randrange(15, 29, 1))
+            time.sleep(random.randrange(14, 21, 1))
 
             driver.implicitly_wait(10)
 
@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     # choose today or specific start date
     date = datetime.date.today()
-    #date = datetime.date(2023, 2, 15)
+    date = datetime.date(2023, 2, 2)
 
     '''Airports: SLC | Salt Lake, NYC | New York City'''
     origin_airport = 'SLC'
