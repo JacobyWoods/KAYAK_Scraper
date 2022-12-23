@@ -1,4 +1,6 @@
 from selenium import webdriver
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.common.by import By
 import pandas as pd
 import re
@@ -20,7 +22,7 @@ def scrape(origin_airport, destination_airport, start_date=datetime.date.today()
 
     # Scrape each page in the url list and add to database.
     for page in url_list:
-        with webdriver.Firefox(executable_path='/usr/local/bin/geckodriver') as driver:
+        with webdriver.Firefox(service=FirefoxService('/usr/local/bin/geckodriver')) as driver:
             driver.get(page)
             time.sleep(random.randrange(14, 21, 1))
 
@@ -65,11 +67,11 @@ if __name__ == '__main__':
 
     # choose today or specific start date
     date = datetime.date.today()
-    date = datetime.date(2023, 2, 2)
+    #date = datetime.date(2023, 2, 2)
 
     '''Airports: SLC | Salt Lake, NYC | New York City'''
-    origin_airport = 'SLC'
-    destination_airport = 'NYC'
+    origin_airport = 'NYC'
+    destination_airport = 'SLC'
 
     scrape(origin_airport, destination_airport, date)
 
